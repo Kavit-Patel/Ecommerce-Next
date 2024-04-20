@@ -1,113 +1,336 @@
-import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+// import { Link } from "react-router-dom";
+import Link from "next/link";
+import { AppDispatch, RootState } from "../store/Store";
+import { fetchProducts } from "../store/product/productApi";
+import { useEffect, useMemo, useRef, useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import Loader from "../components/Loader";
+import {
+  getCartFromDb,
+  removeItem,
+  syncLsCartQuantityToDb,
+  syncLsCartToDb,
+} from "../store/cart/cartApi";
+import { setCartItemLs } from "../store/cart/cartSlice";
+import {
+  getFullCartItemsFromLs,
+  getItemProductify,
+} from "../utilityFunctions/localStorageReduxOperation";
+import {
+  calcCartItemDiffLsDs,
+  calcCartItemQuantityDiffLsDs,
+} from "../utilityFunctions/calcDiffLsDs";
+import { vanillaUserCartAddition } from "../utilityFunctions/vanillaUserCartAddition";
+import { toast } from "react-toastify";
+import HomeInitialization from "@/components/HomeInitialization";
+import HomeCategory from "@/components/HomeCategory";
+import HomeFeature from "@/components/HomeFeature";
+import HomeDiscounted from "@/components/HomeDiscounted";
 
-export default function Home() {
+const Home = () => {
+  // const dispatch = useDispatch<AppDispatch>();
+  // const data = useSelector((state: RootState) => state.product);
+  // const user = useSelector((state: RootState) => state.user);
+  // const cart = useSelector((state: RootState) => state.cart);
+  // const order = useSelector((state: RootState) => state.order);
+  // const { paymentSuccedStatus } = useSelector(
+  //   (state: RootState) => state.payment
+  // );
+  // const [resetCartItemDiffLsDs, setResetCartItemDiffLsDs] =
+  //   useState<boolean>(false);
+  // const [resetCartItemQuantityDiffLsDs, setResetCartItemQuantityDiffLsDs] =
+  //   useState<boolean>(false);
+  // const calledForCartSync = useRef<boolean>(false);
+  // const calledForCartQuantitySync = useRef<boolean>(false);
+
+  // useEffect(() => {
+  //   if (
+  //     user.user?._id &&
+  //     (paymentSuccedStatus === "success" || order.createdStatus === "success")
+  //   ) {
+  //     dispatch(getCartFromDb(user.user._id)); //after order generation db cart item state needs to be latest(empty)
+  //     dispatch(setCartItemLs([])); // after order generation ls cart item state needs to be emptied
+  //   }
+  // }, [dispatch, paymentSuccedStatus, order.createdStatus, user.user?._id]);
+
+  // const cartItemDiffLsDb = useMemo(() => {
+  //   if (resetCartItemDiffLsDs || cart.statusDb === "idle") {
+  //     return [];
+  //   }
+  //   if (
+  //     cart.statusDb === "success" &&
+  //     cart.statusLs === "success" &&
+  //     cart.cartItemsLs.length > 0
+  //   ) {
+  //     return calcCartItemDiffLsDs(
+  //       cart.cartItemsLs,
+  //       cart.cartItemsDb,
+  //       user.user?._id
+  //     );
+  //   } else {
+  //     return [];
+  //   }
+  // }, [
+  //   cart.cartItemsDb,
+  //   cart.cartItemsLs,
+  //   resetCartItemDiffLsDs,
+  //   cart.statusDb,
+  //   cart.statusLs,
+  //   user.user?._id,
+  // ]);
+
+  // const cartItemQuantityDiffLsDs = useMemo(() => {
+  //   if (resetCartItemQuantityDiffLsDs || cart.statusDb === "idle") {
+  //     return [];
+  //   }
+  //   if (cart.statusDb === "success") {
+  //     return calcCartItemQuantityDiffLsDs(
+  //       cart.cartItemsLs,
+  //       cart.cartItemsDb,
+  //       user.user?._id
+  //     );
+  //   } else {
+  //     return [];
+  //   }
+  // }, [
+  //   cart.cartItemsDb,
+  //   cart.cartItemsLs,
+  //   cart.statusDb,
+  //   resetCartItemQuantityDiffLsDs,
+  //   user.user?._id,
+  // ]);
+
+  // useEffect(() => {
+  //   dispatch(fetchProducts());
+  //   if (
+  //     user.status === "success" &&
+  //     paymentSuccedStatus === "idle" &&
+  //     order.createdStatus === "idle"
+  //   ) {
+  //     dispatch(getCartFromDb(user.user?._id));
+  //   }
+  // }, [
+  //   dispatch,
+  //   user.status,
+  //   user.user?._id,
+  //   paymentSuccedStatus,
+  //   order.createdStatus,
+  // ]);
+  // useEffect(() => {
+  //   if (paymentSuccedStatus === "idle" && order.createdStatus === "idle") {
+  //     dispatch(
+  //       setCartItemLs(
+  //         getFullCartItemsFromLs(
+  //           data.products,
+  //           cart.cartItemsDb,
+  //           user.user?._id
+  //         )
+  //       )
+  //     );
+  //   }
+  // }, [
+  //   dispatch,
+  //   paymentSuccedStatus,
+  //   order.createdStatus,
+  //   data.products,
+  //   cart.cartItemsDb,
+  //   cart.statusDb,
+  //   user.user?._id,
+  // ]);
+
+  // useEffect(() => {
+  //   if (
+  //     user.status === "success" &&
+  //     cartItemQuantityDiffLsDs.length > 0 &&
+  //     !calledForCartQuantitySync.current
+  //   ) {
+  //     dispatch(
+  //       syncLsCartQuantityToDb({
+  //         userId: user.user?._id,
+  //         cartArray: cartItemQuantityDiffLsDs,
+  //       })
+  //     );
+  //     calledForCartQuantitySync.current = true;
+  //     setResetCartItemQuantityDiffLsDs(true);
+  //   }
+  // }, [cartItemQuantityDiffLsDs, dispatch, user.status, user.user?._id]);
+
+  // useEffect(() => {
+  //   if (
+  //     user.status === "success" &&
+  //     cartItemDiffLsDb.length > 0 &&
+  //     !calledForCartSync.current
+  //   ) {
+  //     dispatch(
+  //       syncLsCartToDb({
+  //         userId: user.user?._id,
+  //         cartArray: cartItemDiffLsDb,
+  //       })
+  //     );
+  //     calledForCartSync.current = true;
+  //     setResetCartItemDiffLsDs(true);
+  //   }
+  // }, [dispatch, user.status, user.user?._id, cartItemDiffLsDb]);
+
+  // // if user redirected to login from vanilla-ecommerce website
+  // // and after successfull login he comes here then logic to get his cart is here
+  // useEffect(() => {
+  //   if (
+  //     user.vanillaUserStatus &&
+  //     user.vanillaUserCart &&
+  //     user.user?._id &&
+  //     cart.statusDb === "success"
+  //   ) {
+  //     const itemTobeRemoved = vanillaUserCartAddition(
+  //       user.vanillaUserCart,
+  //       user.user._id
+  //     );
+  //     toast.info("Your Cart Items Placed In Cart Successfully !");
+  //     if (cart.cartItemsDb.length > 0) {
+  //       const itemTobeRemovedProductiFy = getItemProductify(
+  //         itemTobeRemoved,
+  //         data.products,
+  //         cart.cartItemsDb
+  //       );
+  //       if (itemTobeRemovedProductiFy.length > 0) {
+  //         itemTobeRemovedProductiFy.forEach((item) => {
+  //           dispatch(removeItem({ userId: user.user?._id, cartId: item._id }));
+  //         });
+  //       }
+  //     }
+  //   }
+  // }, [
+  //   dispatch,
+  //   data.products,
+  //   cart.cartItemsDb,
+  //   user.vanillaUserStatus,
+  //   user.user?._id,
+  //   user.vanillaUserCart,
+  //   cart.statusDb,
+  // ]);
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className=" bg-[#DFDFDF] w-full flex justify-center">
+      <div className={`w-[375px] md:w-[800px] lg:w-[1000px] `}>
+        {/* Hero Section Starts */}
+        <div className="w-full h-[632px] px-8 bg-[#211C24] flex flex-col-reverse lg:flex-row justify-evenly items-center">
+          <div className="flex flex-col gap-2 justify-center pl-20 text-xs md:text-sm lg:text-lg">
+            <p className="text-gray-500">Pro-Beyond</p>
+            <p className="text-xl md:text-4xl lg:text-7xl text-gray-400 font-thin">
+              IPhone 14 <span className="font-normal">Pro</span>
+            </p>
+            <p className="text-gray-500">
+              Created to change everything for the better. For everything
+            </p>
+            <Link
+              href="/products"
+              className="button border border-gray-400 text-gray-400 px-8 py-1 rounded-sm w-fit transition-all hover:scale-105 active:scale-100"
+            >
+              Shop Now
+            </Link>
+          </div>
+          <img
+            className="w-44 md:w-64 lg:w-fit"
+            src="../../images/Iphone Image.png"
+            alt="Iphone image"
+          />
         </div>
+
+        {/* Hero Section ends  */}
+
+        {/* Presentation Section starts  */}
+
+        <div className="w-full h-[800px] flex flex-col lg:flex-row">
+          <div className="flex-1">
+            <div className="h-1/2 relative flex-1 flex flex-col">
+              <img
+                className="h-[80%] lg:w-[50%] absolute top-4 left-4 lg:top-10 md:left-0 object-cover"
+                src="../../images/PlayStation.png"
+                alt="playstation"
+              />
+              <div className="w-full min-h-full pl-[46%] flex flex-col justify-center gap-2 bg-white">
+                <p className="text-2xl md:text-4xl font-semibold">
+                  Playstation 5
+                </p>
+                <p className="text-xs text-gray-500">
+                  Incredibly powerful CPUs, and an SSD with Intregrated I/O will
+                  redefine your PlayStation experience
+                </p>
+              </div>
+              <div className="flex w-full min-h-full">
+                <div className="bg-[#ededed] flex flex-1 gap-6">
+                  <img className="" src="../../images/Hero2.png" alt="Hero-2" />
+                  <div className="text-2xl flex flex-col justify-center gap-1">
+                    <h1>Apple</h1>
+                    <h1>
+                      AirPods <span className="font-bold">Max</span>
+                    </h1>
+                    <p className="text-xs">
+                      Computational audio. Listen It&apos;s powerful
+                    </p>
+                  </div>
+                </div>
+                <div className="flex-1 bg-[#353535] flex items-center gap-2">
+                  <img
+                    className="h-[54%] md:h-[40%]"
+                    src="../../images/image 36-1.png"
+                    alt="Apple Vision"
+                  />
+                  <div className="text-gray-100 text-xl md:text-2xl flex flex-col gap-1">
+                    <h1>Apple</h1>
+                    <h1>
+                      Vision <span className="font-bold">Pro</span>
+                    </h1>
+                    <p className="text-xs">
+                      An immersive way to experience entertainment
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex-1 flex items-center justify-between pl-10 bg-[#ededed]">
+            <div className="ml-auto flex flex-col gap-4">
+              <h1 className="text-2xl md:text-5xl">
+                Macbook <span className="font-bold">Air</span>
+              </h1>
+              <p className="w-[80%] md:w-[50%] text-xs text-gray-500">
+                The new 15-inch MacBook Air makes room for more of what you love
+                with a spacious Liquid Retina display
+              </p>
+              <Link
+                href="/products"
+                className="button mr-auto border border-black px-5 py-1.5 md:px-10 md:py-3 rounded-sm transition-all hover:scale-105 active:scale-100"
+              >
+                Buy Now
+              </Link>
+            </div>
+            <img
+              className="h-[80%] md:h-[70%]"
+              src="../../images/Screen.png"
+              alt="Screen"
+            />
+          </div>
+        </div>
+        {/* Presentation Section ends  */}
+
+        {/* Category Section starts  */}
+        <HomeCategory />
+        {/* Category Section ends  */}
+
+        {/* Featured Products Section starts  */}
+
+        <HomeFeature />
+        {/* Featured Products Section ends  */}
+
+        {/* Discounted products Section starts  */}
+
+        <HomeDiscounted />
+        {/* Discounted products Section ends */}
+        <HomeInitialization />
       </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </div>
   );
-}
+};
+
+export default Home;
