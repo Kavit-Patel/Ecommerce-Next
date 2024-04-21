@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { useSelector } from "react-redux";
 import Loader from "./Loader";
+import Image from "next/image";
 
 const HomeCategory = () => {
   const data = useSelector((state: RootState) => state.product);
@@ -21,9 +22,21 @@ const HomeCategory = () => {
           data?.products?.map(
             (product) =>
               product.section === "category" && (
-                <div key={product._id} className="categoryCard">
-                  <Link className="" href={`/product/${product._id}`}>
-                    <img className="object-cover" src={product.image} alt="" />
+                <div key={product._id} className="w-full h-full">
+                  <Link
+                    className="w-full h-full self-center"
+                    href={`/product/${product._id}`}
+                  >
+                    <div className="w-24 h-24 lg:w-[90%] lg:h-full relative ml-24 md:ml-0">
+                      <Image
+                        src={product.image.split("../..")[1]}
+                        alt={product.name}
+                        layout="fill"
+                        objectFit="contain"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    </div>
+                    {/* <img className="object-cover" src={product.image} alt="" /> */}
                   </Link>
                 </div>
               )

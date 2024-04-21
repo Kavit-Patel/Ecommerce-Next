@@ -19,7 +19,7 @@ export const addNewOrder = createAsyncThunk(
     };
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/addNewOrder/${dataObject.userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/addNewOrder/${dataObject.userId}`,
         {
           credentials: "include",
           method: "POST",
@@ -51,7 +51,7 @@ export const getUserOrders = createAsyncThunk(
   async (userId: string | undefined, { rejectWithValue }) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/getUserOrders/${userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/getUserOrders/${userId}`,
         {
           credentials: "include",
           headers: {
@@ -84,9 +84,7 @@ export const getSingleUserOrder = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/getSingleUserOrder/${
-          dataObject.userId
-        }/${dataObject.orderId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/getSingleUserOrder/${dataObject.userId}/${dataObject.orderId}`,
         {
           credentials: "include",
           headers: {
@@ -116,7 +114,7 @@ export const getUserPendingOrder = createAsyncThunk(
   async (userId: string | undefined, { rejectWithValue }) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/getUserPendingOrder/${userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/getUserPendingOrder/${userId}`,
         {
           credentials: "include",
           headers: {

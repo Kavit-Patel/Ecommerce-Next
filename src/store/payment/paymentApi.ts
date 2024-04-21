@@ -49,9 +49,7 @@ export const createPaymentIntent = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/createPaymentIntent/${
-          dataObject.userId
-        }/${dataObject.orderId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/createPaymentIntent/${dataObject.userId}/${dataObject.orderId}`,
         {
           credentials: "include",
           method: "POST",
@@ -91,9 +89,7 @@ export const getExistingPaymentIntent = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/fetchOrderPaymentIntent/${
-          dataObject.userId
-        }/${dataObject.orderId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/fetchOrderPaymentIntent/${dataObject.userId}/${dataObject.orderId}`,
         {
           credentials: "include",
           headers: {
@@ -131,9 +127,7 @@ export const paymentSuccessed = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/paymentSuccessed/${
-          dataObject.userId
-        }/${dataObject.paymentId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/paymentSuccessed/${dataObject.userId}/${dataObject.paymentId}`,
         {
           credentials: "include",
           method: "POST",

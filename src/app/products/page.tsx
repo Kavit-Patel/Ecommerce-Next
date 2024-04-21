@@ -10,6 +10,7 @@ import Loader from "@/components/Loader";
 // import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 const Products = () => {
   const searchParams = useSearchParams();
   const search = searchParams.get("searching");
@@ -180,9 +181,17 @@ const Products = () => {
                         product.section === "products" && (
                           <div
                             key={product._id}
-                            className="featuredCard bg-[#eeebeb] border w-[230px] h-[432px] flex flex-col justify-center items-center gap-4 rounded-sm"
+                            className="featuredCard bg-[#eeebeb] border w-[230px] h-[432px] flex flex-col justify-center items-center gap-4 rounded-sm py-4 "
                           >
-                            <img src={product.image} alt={product.name} />
+                            <div className="w-[80%] h-full relative">
+                              <Image
+                                src={product.image.split("../..")[1]}
+                                alt={product.name}
+                                layout="fill"
+                                objectFit="contain"
+                              />
+                            </div>
+                            {/* <img src={product.image} alt={product.name} /> */}
                             <h2 className="text-sm px-4 font-semibold text-center">
                               {product.name}
                             </h2>

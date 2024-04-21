@@ -10,25 +10,17 @@ import {
 interface initialStateType {
   user: userType | null;
   status: "idle" | "success" | "pending" | "error";
-  vanillaUserCart: LsCartTypeVanillaUser[] | null;
-  vanillaUserStatus: boolean;
 }
 
 const initialState: initialStateType = {
   user: null,
   status: "idle",
-  vanillaUserCart: null,
-  vanillaUserStatus: false,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setVanillaUser: (state, action) => {
-      state.vanillaUserStatus = action.payload.status;
-      state.vanillaUserCart = action.payload.data;
-    },
     logout: (state) => {
       state.status = "idle";
       state.user = null;
@@ -71,5 +63,5 @@ const userSlice = createSlice({
       });
   },
 });
-export const { setVanillaUser, logout } = userSlice.actions;
+export const { logout } = userSlice.actions;
 export default userSlice.reducer;

@@ -13,7 +13,7 @@ export const addNewAddress = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/addNewAddress/${dataObject.userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/addNewAddress/${dataObject.userId}`,
         {
           credentials: "include",
           method: "POST",
@@ -42,7 +42,7 @@ export const fetchUserAddress = createAsyncThunk(
   async (userId: string | undefined, { rejectWithValue }) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/fetchUserAddress/${userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/fetchUserAddress/${userId}`,
         {
           credentials: "include",
           headers: {
@@ -76,9 +76,7 @@ export const updateUserAddress = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/updateUserAddress/${
-          dataObject.userId
-        }`,
+        `${process.env.NEXT_PUBLIC_API}/api/updateUserAddress/${dataObject.userId}`,
         {
           credentials: "include",
           method: "PUT",
@@ -111,9 +109,7 @@ export const deleteUserAddress = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/deleteUserAddress/${
-          dataObject.userId
-        }/${dataObject.addressId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/deleteUserAddress/${dataObject.userId}/${dataObject.addressId}`,
         {
           credentials: "include",
           method: "DELETE",

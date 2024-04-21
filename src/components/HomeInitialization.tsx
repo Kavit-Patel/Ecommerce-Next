@@ -1,5 +1,6 @@
 "use client";
 
+import "react-toastify/dist/ReactToastify.css";
 import { AppDispatch, RootState } from "@/store/Store";
 import {
   getCartFromDb,
@@ -17,10 +18,10 @@ import {
   getFullCartItemsFromLs,
   getItemProductify,
 } from "@/utilityFunctions/localStorageReduxOperation";
-import { vanillaUserCartAddition } from "@/utilityFunctions/vanillaUserCartAddition";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { autoLoginWithCookie } from "@/store/user/userApi";
 
 const HomeInitialization = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,14 +40,28 @@ const HomeInitialization = () => {
   const calledForCartQuantitySync = useRef<boolean>(false);
 
   useEffect(() => {
+    if (user.status === "idle") {
+      dispatch(autoLoginWithCookie());
+    }
+  }, [dispatch, user.status]);
+
+  useEffect(() => {
     if (
       user.user?._id &&
-      (paymentSuccedStatus === "success" || order.createdStatus === "success")
+      (paymentSuccedStatus === "success" ||
+        order.createdStatus === "success" ||
+        cart.statusDb === "idle")
     ) {
       dispatch(getCartFromDb(user.user._id)); //after order generation db cart item state needs to be latest(empty)
       dispatch(setCartItemLs([])); // after order generation ls cart item state needs to be emptied
     }
-  }, [dispatch, paymentSuccedStatus, order.createdStatus, user.user?._id]);
+  }, [
+    dispatch,
+    paymentSuccedStatus,
+    order.createdStatus,
+    user.user?._id,
+    cart,
+  ]);
 
   const cartItemDiffLsDb = useMemo(() => {
     if (resetCartItemDiffLsDs || cart.statusDb === "idle") {
@@ -96,7 +111,9 @@ const HomeInitialization = () => {
   ]);
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    if (data.productsStatus === "idle" || data.products.length === 0) {
+      dispatch(fetchProducts());
+    }
     if (
       user.status === "success" &&
       paymentSuccedStatus === "idle" &&
@@ -106,6 +123,8 @@ const HomeInitialization = () => {
     }
   }, [
     dispatch,
+    data.productsStatus,
+    data.products,
     user.status,
     user.user?._id,
     paymentSuccedStatus,
@@ -167,43 +186,6 @@ const HomeInitialization = () => {
     }
   }, [dispatch, user.status, user.user?._id, cartItemDiffLsDb]);
 
-  // if user redirected to login from vanilla-ecommerce website
-  // and after successfull login he comes here then logic to get his cart is here
-  useEffect(() => {
-    if (
-      user.vanillaUserStatus &&
-      user.vanillaUserCart &&
-      user.user?._id &&
-      cart.statusDb === "success"
-    ) {
-      const itemTobeRemoved = vanillaUserCartAddition(
-        user.vanillaUserCart,
-        user.user._id
-      );
-      toast.info("Your Cart Items Placed In Cart Successfully !");
-      if (cart.cartItemsDb.length > 0) {
-        const itemTobeRemovedProductiFy = getItemProductify(
-          itemTobeRemoved,
-          data.products,
-          cart.cartItemsDb
-        );
-        if (itemTobeRemovedProductiFy.length > 0) {
-          itemTobeRemovedProductiFy.forEach((item) => {
-            dispatch(removeItem({ userId: user.user?._id, cartId: item._id }));
-          });
-        }
-      }
-    }
-  }, [
-    dispatch,
-    data.products,
-    cart.cartItemsDb,
-    user.vanillaUserStatus,
-    user.user?._id,
-    user.vanillaUserCart,
-    cart.statusDb,
-  ]);
-  console.log("d", data);
   return <> </>;
 };
 

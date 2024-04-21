@@ -4,6 +4,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import Loader from "./Loader";
 import Link from "next/link";
+import Image from "next/image";
 
 const HomeDiscounted = () => {
   const data = useSelector((state: RootState) => state.product);
@@ -19,9 +20,18 @@ const HomeDiscounted = () => {
               product.section === "discounted" && (
                 <div
                   key={product._id}
-                  className="w-[200px] h-[432px] bg-[#eeebeb] flex flex-col justify-center items-center gap-4"
+                  className="w-[200px] h-[432px] bg-[#eeebeb] flex flex-col justify-center items-center gap-4 mb-4 pb-4"
                 >
-                  <img src={product.image} alt={product.name} />
+                  <div className="w-[80%] h-full relative">
+                    <Image
+                      src={product.image.split("../..")[1]}
+                      alt={product.name}
+                      layout="fill"
+                      objectFit="contain"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  </div>
+                  {/* <img src={product.image} alt={product.name} /> */}
                   <h2 className="h-16 text-sm px-4 font-semibold text-center">
                     {product.name}
                   </h2>

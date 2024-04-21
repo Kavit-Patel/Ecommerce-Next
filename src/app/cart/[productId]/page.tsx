@@ -13,6 +13,7 @@ import {
 } from "@/utilityFunctions/localStorageCRUD";
 import { getFullCartItemsFromLs } from "@/utilityFunctions/localStorageReduxOperation";
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 
 function Cart() {
   const router = useRouter();
@@ -37,8 +38,13 @@ function Cart() {
   }, [cartItemsLs]);
 
   useEffect(() => {
-    if (productId && typeof productId === "string") {
-      addToCartLs(user.user?._id, productId);
+    if (
+      productId &&
+      typeof productId === "string" &&
+      user.user?._id &&
+      productId !== "items"
+    ) {
+      addToCartLs(user.user._id, productId);
       router.push("/cart/items");
     }
     dispatch(
@@ -70,9 +76,12 @@ function Cart() {
     );
   };
   const handleCheckOut = () => {
-    router.push("/checkout");
+    if (user.status === "success" && user.user?._id) {
+      router.push("/checkout");
+    } else {
+      router.push("/login");
+    }
   };
-  console.log(cartItemsLs);
   return (
     <main className="w-full bg-[#DFDFDF] flex justify-center">
       <div className="w-[375px] md:w-[800px] lg:w-[1000px] bg-[#f5f5f5]">
@@ -87,10 +96,10 @@ function Cart() {
                     <h2 className="text-xl font-semibold mb-8 text-center lg:text-left">
                       Shopping Cart
                     </h2>
-                    <div className="h-[560px] flex flex-col gap-4">
+                    <div className="w-full h-[560px] flex flex-col gap-4">
                       <div
                         id="cartContainer"
-                        className="overflow-y-auto h-[80%] flex flex-col gap-3"
+                        className="overflow-y-auto w-full h-[80%] flex flex-col gap-3"
                       >
                         {cartItemsLs.map((item) => (
                           <div
@@ -98,11 +107,21 @@ function Cart() {
                             id="card"
                             className="w-full flex flex-col shadow-md lg:flex-row gap-3 lg:gap-6 justify-center items-center p-2"
                           >
-                            <img
+                            {
+                              <div className="w-14 h-14 lg:w-full lg:h-full relative">
+                                <Image
+                                  src={item.product.image.split("../..")[1]}
+                                  alt={item.product.name}
+                                  layout="fill"
+                                  objectFit="contain"
+                                />
+                              </div>
+                            }
+                            {/* <img
                               className="w-14"
                               src={item.product.image}
                               alt={item.product.name}
-                            />
+                            /> */}
                             <div className="flex flex-col items-center lg:items-start gap-1">
                               <span className="title w-full lg:w-44 text-center lg:text-left text-xs">
                                 {item.product.name}

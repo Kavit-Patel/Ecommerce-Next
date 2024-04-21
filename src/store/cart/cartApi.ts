@@ -7,7 +7,7 @@ export const getCartFromDb = createAsyncThunk(
   async (userId: string | null | undefined, { rejectWithValue }) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/getUserCart/${userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/getUserCart/${userId}`,
         { credentials: "include" }
       );
       const data = await request.json();
@@ -38,7 +38,7 @@ export const addToCart = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/addToCart/${
+        `${process.env.NEXT_PUBLIC_API}/api/addToCart/${
           dataObject.userId ? dataObject.userId : "6678f3af45bd1badthina555"
         }/${
           dataObject.productId
@@ -79,7 +79,7 @@ export const increaseQuantity = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/increaseQuantity/${
+        `${process.env.NEXT_PUBLIC_API}/api/increaseQuantity/${
           dataObject.userId ? dataObject.userId : "6678f3af45bd1badthina555"
         }/${
           dataObject.cartId ? dataObject.cartId : "6678f3af45bd1badthina555"
@@ -118,7 +118,7 @@ export const decreaseQuantity = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/decreaseQuantity/${
+        `${process.env.NEXT_PUBLIC_API}/api/decreaseQuantity/${
           dataObject.userId ? dataObject.userId : "6678f3af45bd1badthina555"
         }/${
           dataObject.cartId ? dataObject.cartId : "6678f3af45bd1badthina555"
@@ -156,7 +156,7 @@ export const removeItem = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/removeItem/${
+        `${process.env.NEXT_PUBLIC_API}/api/removeItem/${
           dataObject.userId ? dataObject.userId : "6678f3af45bd1badthina555"
         }/${
           dataObject.cartId ? dataObject.cartId : "6678f3af45bd1badthina555"
@@ -195,7 +195,7 @@ export const syncLsCartToDb = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/syncCartWithLs/${dataObject.userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/syncCartWithLs/${dataObject.userId}`,
         {
           credentials: "include",
           method: "POST",
@@ -232,9 +232,7 @@ export const syncLsCartQuantityToDb = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${import.meta.env.VITE_API}/api/syncQuantityWithLs/${
-          dataObject.userId
-        }`,
+        `${process.env.NEXT_PUBLIC_API}/api/syncQuantityWithLs/${dataObject.userId}`,
         {
           credentials: "include",
           method: "POST",
