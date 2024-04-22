@@ -7,7 +7,6 @@ export const getFullCartItemsFromLs = (
   userId: string | undefined
 ) => {
   const lsCart: LsCartType[] = getCartItems();
-  console.log("ls", lsCart, products);
   //To productify local storage items
   let fullCartItemsLs: fullCartItemType[] =
     lsCart.length > 0 && products.length > 0
@@ -54,7 +53,6 @@ export const getFullCartItemsFromLs = (
     }
     return item;
   });
-  console.log("fc", fullCartItemsLs);
   return fullCartItemsLs;
 };
 

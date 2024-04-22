@@ -5,12 +5,14 @@ import { AppDispatch, RootState } from "../store/Store";
 import { useEffect, useState } from "react";
 import { logout } from "../store/user/userSlice";
 import { userLogOut } from "../store/cart/cartSlice";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { autoLoginWithCookie } from "@/store/user/userApi";
+import { getSearchKeywords } from "@/store/product/productSlice";
 
 export const Header = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, status } = useSelector((state: RootState) => state.user);
   const { cartItemsLs } = useSelector((state: RootState) => state.cart);
 
@@ -40,7 +42,10 @@ export const Header = () => {
   }, []);
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const search = e.target.value;
-    router.push(`/products?searching=${search}`);
+    dispatch(getSearchKeywords(search));
+    if (!pathname.includes("/products")) {
+      router.push(`/products`);
+    }
   };
   return (
     <div className="w-full bg-[#DFDFDF] flex justify-center">

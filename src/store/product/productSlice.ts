@@ -9,6 +9,7 @@ const initialState: dataType = {
   product: null,
   productStatus: "idle",
   productsPriceRange: [1000000, 0],
+  searchFilterProducts: "",
 };
 const productSlice = createSlice({
   name: "products",
@@ -18,6 +19,9 @@ const productSlice = createSlice({
       state.productsPriceRange = state.products
         .map((prod) => +prod.price.toFixed(0))
         .sort((a, b) => b - a);
+    },
+    getSearchKeywords: (state, action) => {
+      state.searchFilterProducts = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -48,4 +52,5 @@ const productSlice = createSlice({
 });
 
 export default productSlice.reducer;
-export const { getProductsPriceRange } = productSlice.actions;
+export const { getProductsPriceRange, getSearchKeywords } =
+  productSlice.actions;

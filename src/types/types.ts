@@ -20,6 +20,7 @@ export interface dataType {
   productsStatus: "idle" | "loading" | "success" | "error";
   productStatus: "idle" | "loading" | "success" | "error";
   productsPriceRange: number[];
+  searchFilterProducts: string;
 }
 export interface fullCartItemType {
   _id?: string;
