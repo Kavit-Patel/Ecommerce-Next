@@ -26,6 +26,7 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import { MdCurrencyRupee } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { Suspense } from "react";
 
 const Order = () => {
   const params = useParams();
@@ -199,147 +200,151 @@ const Order = () => {
     payment.clientSecret
   );
   return (
-    <main className="w-full bg-[#DFDFDF] flex justify-center">
-      <div className="w-[375px] md:w-[800px] lg:w-[1000px] bg-[#f5f5f5]">
-        <section className="w-full  h-full py-5 px-8">
-          <OrderSteps path={pathname} />
-          <div className="w-full flex">
-            <div className="h-full hidden md:block  flex-col w-[40%] border-2">
-              <div className="h-full p-4 mt-5 flex flex-col gap-4">
-                <div
-                  id="cartContainer"
-                  className=" overflow-y-auto max-h-96 flex flex-col gap-3"
-                >
-                  <h2 className="text-sm font-semibold mb-2">Summary</h2>
-                  {order.createdStatus === "pending" && <Loader />}
-                  {order.currentOrder?.products.map((item) => (
-                    <div
-                      key={item.product._id}
-                      id="card"
-                      className="bg-[#f5f0f0] w-full flex shadow-md gap-3 items-center p-2 font-semibold"
-                    >
-                      <div className="w-8 h-8 relative">
-                        <Image
-                          src={item.product.image.split("../..")[1]}
-                          alt={item.product.name}
-                          layout="fill"
-                          objectFit="contain"
-                        />
-                      </div>
-                      {/* <img
+    <Suspense>
+      <main className="w-full bg-[#DFDFDF] flex justify-center">
+        <div className="w-[375px] md:w-[800px] lg:w-[1000px] bg-[#f5f5f5]">
+          <section className="w-full  h-full py-5 px-8">
+            <OrderSteps path={pathname} />
+            <div className="w-full flex">
+              <div className="h-full hidden md:block  flex-col w-[40%] border-2">
+                <div className="h-full p-4 mt-5 flex flex-col gap-4">
+                  <div
+                    id="cartContainer"
+                    className=" overflow-y-auto max-h-96 flex flex-col gap-3"
+                  >
+                    <h2 className="text-sm font-semibold mb-2">Summary</h2>
+                    {order.createdStatus === "pending" && <Loader />}
+                    {order.currentOrder?.products.map((item) => (
+                      <div
+                        key={item.product._id}
+                        id="card"
+                        className="bg-[#f5f0f0] w-full flex shadow-md gap-3 items-center p-2 font-semibold"
+                      >
+                        <div className="w-8 h-8 relative">
+                          <Image
+                            src={item.product.image.split("../..")[1]}
+                            alt={item.product.name}
+                            layout="fill"
+                            objectFit="contain"
+                          />
+                        </div>
+                        {/* <img
                         className="w-8"
                         src={item.product.image}
                         alt={item.product.name}
                       /> */}
 
-                      <span className="title w-full lg:w-44 text-center lg:text-left text-xs">
-                        {item.product.name}
-                      </span>
-                      <span className="id text-xs ml-auto flex items-center">
-                        <MdCurrencyRupee />
-                        <span>{item.product.price * item.quantity}</span>
-                      </span>
-                    </div>
-                  ))}
+                        <span className="title w-full lg:w-44 text-center lg:text-left text-xs">
+                          {item.product.name}
+                        </span>
+                        <span className="id text-xs ml-auto flex items-center">
+                          <MdCurrencyRupee />
+                          <span>{item.product.price * item.quantity}</span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className=" text-xs px-4 flex flex-col gap-2">
+                  <p>Address</p>
+                  <p>
+                    {address.split("\n").map((line, index, arr) => (
+                      <React.Fragment key={index}>
+                        {line}
+                        {arr.length - 1 && <br />}
+                      </React.Fragment>
+                    ))}
+                  </p>
+                  <div className="flex justify-between font-semibold">
+                    <span>Subtotal</span>
+                    <span className="subtotal">
+                      {order.currentOrder ? (
+                        <span className="flex items-center">
+                          <MdCurrencyRupee />
+                          <span>{order.currentOrder.subtotal}</span>
+                        </span>
+                      ) : null}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-700">Estimated Tax</span>
+                    <span className="tax font-semibold">
+                      {order.currentOrder ? (
+                        <span className="flex items-center">
+                          <MdCurrencyRupee />
+                          <span>{order.currentOrder.tax}</span>
+                        </span>
+                      ) : null}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-700">
+                      Estimated shipping & Handling
+                    </span>
+                    <span className="shipping font-semibold">
+                      {order.currentOrder ? (
+                        <span className="flex items-center">
+                          <MdCurrencyRupee />
+                          <span>{order.currentOrder.shipping}</span>
+                        </span>
+                      ) : null}
+                    </span>
+                  </div>
+                  <div className="flex justify-between font-semibold">
+                    <span>Total</span>
+                    <span className="total">
+                      {order.currentOrder ? (
+                        <span className="flex items-center">
+                          <MdCurrencyRupee />
+                          <span>{order.currentOrder.total}</span>
+                        </span>
+                      ) : null}
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className=" text-xs px-4 flex flex-col gap-2">
-                <p>Address</p>
-                <p>
-                  {address.split("\n").map((line, index, arr) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      {arr.length - 1 && <br />}
-                    </React.Fragment>
-                  ))}
-                </p>
-                <div className="flex justify-between font-semibold">
-                  <span>Subtotal</span>
-                  <span className="subtotal">
-                    {order.currentOrder ? (
-                      <span className="flex items-center">
-                        <MdCurrencyRupee />
-                        <span>{order.currentOrder.subtotal}</span>
-                      </span>
-                    ) : null}
+              <div className="p-4 mt-5 flex flex-col gap-4">
+                <h2 className="text-sm font-semibold">Payment</h2>
+                <div className=" flex gap-4 text-xs">
+                  <span
+                    onClick={() =>
+                      setPaymentMode({ creditCart: true, crypto: false })
+                    }
+                    className={`${
+                      paymentMode.creditCart
+                        ? "font-semibold border-b border-black pb-1"
+                        : ""
+                    } cursor-pointer`}
+                  >
+                    Credit Cart
+                  </span>
+                  <span
+                    onClick={() =>
+                      setPaymentMode({ creditCart: false, crypto: true })
+                    }
+                    className={`${
+                      paymentMode.crypto
+                        ? "font-semibold border-b border-black pb-1"
+                        : ""
+                    } cursor-pointer`}
+                  >
+                    Crypto
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-700">Estimated Tax</span>
-                  <span className="tax font-semibold">
-                    {order.currentOrder ? (
-                      <span className="flex items-center">
-                        <MdCurrencyRupee />
-                        <span>{order.currentOrder.tax}</span>
-                      </span>
-                    ) : null}
-                  </span>
+                <div
+                  className={`${paymentMode.creditCart ? "block" : "hidden"}`}
+                >
+                  {payment.clientSecret ? <Payment /> : <Loader />}
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-700">
-                    Estimated shipping & Handling
-                  </span>
-                  <span className="shipping font-semibold">
-                    {order.currentOrder ? (
-                      <span className="flex items-center">
-                        <MdCurrencyRupee />
-                        <span>{order.currentOrder.shipping}</span>
-                      </span>
-                    ) : null}
-                  </span>
-                </div>
-                <div className="flex justify-between font-semibold">
-                  <span>Total</span>
-                  <span className="total">
-                    {order.currentOrder ? (
-                      <span className="flex items-center">
-                        <MdCurrencyRupee />
-                        <span>{order.currentOrder.total}</span>
-                      </span>
-                    ) : null}
-                  </span>
+                <div className={`${paymentMode.crypto ? "block" : "hidden"}`}>
+                  <div>This Method is under maintainance..</div>
                 </div>
               </div>
             </div>
-            <div className="p-4 mt-5 flex flex-col gap-4">
-              <h2 className="text-sm font-semibold">Payment</h2>
-              <div className=" flex gap-4 text-xs">
-                <span
-                  onClick={() =>
-                    setPaymentMode({ creditCart: true, crypto: false })
-                  }
-                  className={`${
-                    paymentMode.creditCart
-                      ? "font-semibold border-b border-black pb-1"
-                      : ""
-                  } cursor-pointer`}
-                >
-                  Credit Cart
-                </span>
-                <span
-                  onClick={() =>
-                    setPaymentMode({ creditCart: false, crypto: true })
-                  }
-                  className={`${
-                    paymentMode.crypto
-                      ? "font-semibold border-b border-black pb-1"
-                      : ""
-                  } cursor-pointer`}
-                >
-                  Crypto
-                </span>
-              </div>
-              <div className={`${paymentMode.creditCart ? "block" : "hidden"}`}>
-                {payment.clientSecret ? <Payment /> : <Loader />}
-              </div>
-              <div className={`${paymentMode.crypto ? "block" : "hidden"}`}>
-                <div>This Method is under maintainance..</div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
+          </section>
+        </div>
+      </main>
+    </Suspense>
   );
 };
 
