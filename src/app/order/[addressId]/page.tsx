@@ -191,14 +191,6 @@ const Order = () => {
     user.user?._id,
     payment.clientSecret,
   ]);
-  console.log(
-    params,
-    searchParams.get("orderId"),
-    payment.fetchedStatus,
-    user.status,
-    payment.fetchedMessage,
-    payment.clientSecret
-  );
   return (
     <Suspense>
       <main className="w-full bg-[#DFDFDF] flex justify-center">

@@ -46,7 +46,6 @@ const Product = () => {
       image: "/images/battery.png",
     },
   ];
-  console.log(data.product?.image);
   return (
     <main className="w-full bg-[#DFDFDF] flex justify-center">
       <div className="w-[375px] md:w-[800px] lg:w-[1000px] bg-[#f5f5f5]">
