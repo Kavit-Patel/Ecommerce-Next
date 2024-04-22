@@ -9,12 +9,12 @@ import { fetchProducts } from "@/store/product/productApi";
 import { getProductsPriceRange } from "@/store/product/productSlice";
 import Loader from "@/components/Loader";
 // import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 const Products = () => {
-  const searchParams = useSearchParams();
-  const search = searchParams.get("searching");
+  // const searchParams = useSearchParams();
+  // const search = searchParams.get("searching");
   const pathname = usePathname();
   const dispatch = useDispatch<AppDispatch>();
   const data = useSelector((state: RootState) => state.product);
@@ -157,15 +157,15 @@ const Products = () => {
                     className="w-full flex flex-wrap justify-center gap-1.5"
                   >
                     {data.products
-                      .filter(
-                        (filteredProduct) =>
-                          filteredProduct.price <= price.current &&
-                          (!search || search.length === 0
-                            ? true
-                            : filteredProduct.name
-                                .toLowerCase()
-                                .includes(search.toLowerCase()))
-                      )
+                      // .filter(
+                      //   (filteredProduct) =>
+                      //     filteredProduct.price <= price.current &&
+                      //     (!search || search.length === 0
+                      //       ? true
+                      //       : filteredProduct.name
+                      //           .toLowerCase()
+                      //           .includes(search.toLowerCase()))
+                      // )
                       .sort((a, b) => {
                         if (sortChoice === "LowToHigh") {
                           return a.price - b.price;
