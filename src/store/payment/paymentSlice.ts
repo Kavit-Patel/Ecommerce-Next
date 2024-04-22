@@ -12,6 +12,7 @@ export interface paymentIntentType {
   paymentObject: paymentType | undefined;
   createdStatus: "idle" | "success" | "pending" | "error";
   fetchedStatus: "idle" | "success" | "pending" | "error";
+  fetchedMessage: string;
   paymentSuccedStatus: "idle" | "success" | "pending" | "error";
 }
 
@@ -20,6 +21,7 @@ const initialState: paymentIntentType = {
   paymentObject: undefined,
   createdStatus: "idle",
   fetchedStatus: "idle",
+  fetchedMessage: "",
   paymentSuccedStatus: "idle",
 };
 const paymentSlice = createSlice({
@@ -51,6 +53,12 @@ const paymentSlice = createSlice({
       })
       .addCase(getExistingPaymentIntent.rejected, (state, action) => {
         state.fetchedStatus = "error";
+        if (
+          action.meta.rejectedWithValue &&
+          typeof action.payload === "string"
+        ) {
+          state.fetchedMessage = action.payload;
+        }
         toast.error(action.error.message);
       })
       .addCase(getExistingPaymentIntent.pending, (state) => {
@@ -59,6 +67,7 @@ const paymentSlice = createSlice({
       .addCase(paymentSuccessed.fulfilled, (state, action) => {
         state.paymentSuccedStatus = "success";
         state.paymentObject = action.payload;
+        state.fetchedMessage = "";
       })
       .addCase(paymentSuccessed.rejected, (state, action) => {
         state.paymentSuccedStatus = "error";

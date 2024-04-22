@@ -7,6 +7,7 @@ import { logout } from "../store/user/userSlice";
 import { userLogOut } from "../store/cart/cartSlice";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { autoLoginWithCookie } from "@/store/user/userApi";
 
 export const Header = () => {
   const router = useRouter();
@@ -18,6 +19,12 @@ export const Header = () => {
     cart: false,
     user: false,
   });
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(autoLoginWithCookie());
+    }
+  }, [dispatch, status]);
   useEffect(() => {
     if (status !== "success") {
       dispatch(userLogOut());
@@ -95,7 +102,7 @@ export const Header = () => {
             </span>
             {/* <img src="../../images/Favorites.png" alt="Favorites" /> */}
             <Link
-              href={user?._id ? "/cart/items" : "#"}
+              href={user?._id ? "/cart/items" : "/login"}
               className="relative myCart cursor-pointer"
             >
               <span className="block w-8 h-8 relative">

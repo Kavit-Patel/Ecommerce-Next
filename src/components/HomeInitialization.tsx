@@ -20,8 +20,6 @@ import {
 } from "@/utilityFunctions/localStorageReduxOperation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { autoLoginWithCookie } from "@/store/user/userApi";
 
 const HomeInitialization = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,12 +38,6 @@ const HomeInitialization = () => {
   const calledForCartQuantitySync = useRef<boolean>(false);
 
   useEffect(() => {
-    if (user.status === "idle") {
-      dispatch(autoLoginWithCookie());
-    }
-  }, [dispatch, user.status]);
-
-  useEffect(() => {
     if (
       user.user?._id &&
       (paymentSuccedStatus === "success" ||
@@ -60,7 +52,7 @@ const HomeInitialization = () => {
     paymentSuccedStatus,
     order.createdStatus,
     user.user?._id,
-    cart,
+    cart.statusDb,
   ]);
 
   const cartItemDiffLsDb = useMemo(() => {

@@ -1,3 +1,4 @@
+"use client";
 import {
   Elements,
   PaymentElement,
@@ -9,15 +10,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/Store";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 import { paymentSuccessed } from "../store/payment/paymentApi";
+import { useRouter } from "next/navigation";
 // import { useState } from "react";
 
-const stripePromise = loadStripe(`${import.meta.env.VITE_STRIPE_PUBLISH_KEY}`);
+const stripePromise = loadStripe(
+  `${process.env.NEXT_PUBLIC_STRIPE_PUBLISH_KEY}`
+);
 
 const PaymentForm = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { currentOrder } = useSelector((state: RootState) => state.order);
   const { paymentObject } = useSelector((state: RootState) => state.payment);
@@ -49,7 +53,7 @@ const PaymentForm = () => {
           payMode: "Credit Card",
         })
       );
-      navigate("/myorders");
+      router.push("/myorders");
     }
     setIsProcessing(false);
   };

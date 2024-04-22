@@ -109,6 +109,7 @@ export const getExistingPaymentIntent = createAsyncThunk(
         error instanceof Error
           ? error.message
           : "Past PaymentIntent fetching failed !";
+      toast.error(errorMessage);
       return rejectWithValue(errorMessage);
     }
   }
