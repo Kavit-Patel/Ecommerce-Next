@@ -14,7 +14,7 @@ export const registerAsyncUser = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/addNewUser`,
+        `${process.env.NEXT_PUBLIC_API}/api/user/addNewUser`,
         {
           credentials: "include",
           method: "POST",
@@ -49,7 +49,7 @@ export const fetchAsyncUser = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/loginUser`,
+        `${process.env.NEXT_PUBLIC_API}/api/user/loginUser`,
         {
           credentials: "include",
           method: "POST",
@@ -80,7 +80,7 @@ export const autoLoginWithCookie = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/cookieAutoLogin`,
+        `${process.env.NEXT_PUBLIC_API}/api/user/cookieAutoLogin`,
         {
           credentials: "include",
           headers: {

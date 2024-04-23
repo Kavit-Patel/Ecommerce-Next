@@ -5,7 +5,7 @@ export const fetchProducts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/getAllProducts`,
+        `${process.env.NEXT_PUBLIC_API}/api/product/getAllProducts`,
         {
           credentials: "include",
         }
@@ -27,7 +27,7 @@ export const fetchSingleProduct = createAsyncThunk(
   "singleProduct/fetch",
   async (id: string) => {
     const request = await fetch(
-      `${process.env.NEXT_PUBLIC_API}/api/getSingleProduct/${id}`
+      `${process.env.NEXT_PUBLIC_API}/api/product/getSingleProduct/${id}`
     );
     const data = await request.json();
     if (data.success) {

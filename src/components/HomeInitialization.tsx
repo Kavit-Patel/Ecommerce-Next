@@ -4,7 +4,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { AppDispatch, RootState } from "@/store/Store";
 import {
   getCartFromDb,
-  removeItem,
   syncLsCartQuantityToDb,
   syncLsCartToDb,
 } from "@/store/cart/cartApi";

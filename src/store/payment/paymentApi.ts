@@ -1,41 +1,5 @@
-// import { createAsyncThunk } from "@reduxjs/toolkit";
-// import { loadStripe } from "@stripe/stripe-js";
-
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-
-// const stripePromise = loadStripe(`${import.meta.env.STRIPE_PUBLISH_KEY}`);
-
-// export const createPaymentMethod = createAsyncThunk(
-//   "payment/createPaymentMethod",
-//   async ({ cardElement }: { cardElement: never }, { rejectWithValue }) => {
-//     let stripe;
-//     try {
-//       stripe = await stripePromise;
-//     } catch (error) {
-//       return rejectWithValue(
-//         error instanceof Error ? error.message : "Stripe is not Initialised !"
-//       );
-//     }
-//     if (!stripe) {
-//       return rejectWithValue("Stripe is not initialized");
-//     }
-//     if (!cardElement) {
-//       return rejectWithValue("cardElement is not initialized properly");
-//     }
-
-//     const { error, paymentMethod } = await stripe.createPaymentMethod({
-//       type: "card",
-//       card: cardElement,
-//     });
-
-//     if (error) {
-//       return rejectWithValue(error.message);
-//     }
-
-//     return paymentMethod;
-//   }
-// );
 
 export const createPaymentIntent = createAsyncThunk(
   "paymentIntent/create",
@@ -49,7 +13,7 @@ export const createPaymentIntent = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/createPaymentIntent/${dataObject.userId}/${dataObject.orderId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/payment/createPaymentIntent/${dataObject.userId}/${dataObject.orderId}`,
         {
           credentials: "include",
           method: "POST",
@@ -89,7 +53,7 @@ export const getExistingPaymentIntent = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/fetchOrderPaymentIntent/${dataObject.userId}/${dataObject.orderId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/payment/fetchOrderPaymentIntent/${dataObject.userId}/${dataObject.orderId}`,
         {
           credentials: "include",
           headers: {
@@ -128,7 +92,7 @@ export const paymentSuccessed = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/paymentSuccessed/${dataObject.userId}/${dataObject.paymentId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/payment/paymentSuccessed/${dataObject.userId}/${dataObject.paymentId}`,
         {
           credentials: "include",
           method: "POST",

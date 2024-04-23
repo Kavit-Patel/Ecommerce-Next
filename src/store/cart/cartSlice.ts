@@ -2,9 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fullCartItemType } from "../../types/types";
 import {
   addToCart,
-  decreaseQuantity,
   getCartFromDb,
-  increaseQuantity,
   removeItem,
   syncLsCartQuantityToDb,
   syncLsCartToDb,
@@ -94,33 +92,33 @@ const cartSlice = createSlice({
       .addCase(syncLsCartQuantityToDb.pending, (state) => {
         state.statusItemSync = "pending";
       })
-      .addCase(increaseQuantity.fulfilled, (state, action) => {
-        state.statusDb = "success";
-        state.cartItemsDb = state.cartItemsDb.map((item) => {
-          if (item._id === action.payload._id) {
-            return { ...item, quantity: action.payload.quantity };
-          }
-          return item;
-        });
-      })
-      .addCase(increaseQuantity.rejected, (state) => {
-        state.statusDb = "error";
-      })
-      .addCase(increaseQuantity.pending, (state) => {
-        state.statusDb = "pending";
-      })
-      .addCase(decreaseQuantity.fulfilled, (state, action) => {
-        state.statusDb = "success";
-        state.cartItemsDb = state.cartItemsDb.map((item) => {
-          if (item._id === action.payload._id) {
-            return { ...item, quantity: action.payload.quantity };
-          }
-          return item;
-        });
-      })
-      .addCase(decreaseQuantity.rejected, (state) => {
-        state.statusDb = "error";
-      })
+      // .addCase(increaseQuantity.fulfilled, (state, action) => {
+      //   state.statusDb = "success";
+      //   state.cartItemsDb = state.cartItemsDb.map((item) => {
+      //     if (item._id === action.payload._id) {
+      //       return { ...item, quantity: action.payload.quantity };
+      //     }
+      //     return item;
+      //   });
+      // })
+      // .addCase(increaseQuantity.rejected, (state) => {
+      //   state.statusDb = "error";
+      // })
+      // .addCase(increaseQuantity.pending, (state) => {
+      //   state.statusDb = "pending";
+      // })
+      // .addCase(decreaseQuantity.fulfilled, (state, action) => {
+      //   state.statusDb = "success";
+      //   state.cartItemsDb = state.cartItemsDb.map((item) => {
+      //     if (item._id === action.payload._id) {
+      //       return { ...item, quantity: action.payload.quantity };
+      //     }
+      //     return item;
+      //   });
+      // })
+      // .addCase(decreaseQuantity.rejected, (state) => {
+      //   state.statusDb = "error";
+      // })
       .addCase(removeItem.pending, (state) => {
         state.statusDb = "pending";
       })

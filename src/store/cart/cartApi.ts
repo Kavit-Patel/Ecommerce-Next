@@ -7,7 +7,7 @@ export const getCartFromDb = createAsyncThunk(
   async (userId: string | null | undefined, { rejectWithValue }) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/getUserCart/${userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/cart/getUserCart/${userId}`,
         { credentials: "include" }
       );
       const data = await request.json();
@@ -38,7 +38,7 @@ export const addToCart = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/addToCart/${
+        `${process.env.NEXT_PUBLIC_API}/api/cart/addToCart/${
           dataObject.userId ? dataObject.userId : "6678f3af45bd1badthina555"
         }/${
           dataObject.productId
@@ -68,83 +68,6 @@ export const addToCart = createAsyncThunk(
   }
 );
 
-export const increaseQuantity = createAsyncThunk(
-  "cart/increase",
-  async (
-    dataObject: {
-      userId: string | undefined | null;
-      cartId: string | undefined | null;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/increaseQuantity/${
-          dataObject.userId ? dataObject.userId : "6678f3af45bd1badthina555"
-        }/${
-          dataObject.cartId ? dataObject.cartId : "6678f3af45bd1badthina555"
-        }`,
-        {
-          credentials: "include",
-          headers: {
-            "Content-Type": "Application/Json",
-          },
-        }
-      );
-      const data = await request.json();
-      if (data.success) {
-        toast.success(data.message);
-        return data.response;
-      } else {
-        throw new Error(data.message);
-      }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Request Failed !";
-      toast.error(errorMessage);
-      return rejectWithValue(errorMessage);
-    }
-  }
-);
-
-export const decreaseQuantity = createAsyncThunk(
-  "cart/decrease",
-  async (
-    dataObject: {
-      userId: string | undefined | null;
-      cartId: string | undefined | null;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/decreaseQuantity/${
-          dataObject.userId ? dataObject.userId : "6678f3af45bd1badthina555"
-        }/${
-          dataObject.cartId ? dataObject.cartId : "6678f3af45bd1badthina555"
-        }`,
-        {
-          credentials: "include",
-          headers: {
-            "Content-Type": "Application/Json",
-          },
-        }
-      );
-      const data = await request.json();
-      if (data.success) {
-        toast.success(data.message);
-        return data.response;
-      } else {
-        throw new Error(data.message);
-      }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Request Failed !";
-      toast.error(errorMessage);
-      return rejectWithValue(errorMessage);
-    }
-  }
-);
 export const removeItem = createAsyncThunk(
   "cart/removeItem",
   async (
@@ -156,7 +79,7 @@ export const removeItem = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/removeItem/${
+        `${process.env.NEXT_PUBLIC_API}/api/cart/removeItem/${
           dataObject.userId ? dataObject.userId : "6678f3af45bd1badthina555"
         }/${
           dataObject.cartId ? dataObject.cartId : "6678f3af45bd1badthina555"
@@ -195,7 +118,7 @@ export const syncLsCartToDb = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/syncCartWithLs/${dataObject.userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/cart/syncCartWithLs/${dataObject.userId}`,
         {
           credentials: "include",
           method: "POST",
@@ -232,7 +155,7 @@ export const syncLsCartQuantityToDb = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/syncQuantityWithLs/${dataObject.userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/cart/syncQuantityWithLs/${dataObject.userId}`,
         {
           credentials: "include",
           method: "POST",
