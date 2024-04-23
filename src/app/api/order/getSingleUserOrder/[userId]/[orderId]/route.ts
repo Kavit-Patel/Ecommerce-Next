@@ -5,7 +5,7 @@ import { userModel } from "@/model/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
 await ConnectDB();
-export const Delete = async (
+export const GET = async (
   req: NextRequest,
   { params }: { params: { userId: string; orderId: string } }
 ) => {
