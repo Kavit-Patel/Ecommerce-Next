@@ -13,7 +13,7 @@ export const addNewAddress = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/address/addNewAddress/${dataObject.userId}`,
+        `/api/address/addNewAddress/${dataObject.userId}`,
         {
           credentials: "include",
           method: "POST",
@@ -41,15 +41,12 @@ export const fetchUserAddress = createAsyncThunk(
   "address/fetch",
   async (userId: string | undefined, { rejectWithValue }) => {
     try {
-      const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/address/fetchUserAddress/${userId}`,
-        {
-          credentials: "include",
-          headers: {
-            "Content-Type": "Application/Json",
-          },
-        }
-      );
+      const request = await fetch(`/api/address/fetchUserAddress/${userId}`, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "Application/Json",
+        },
+      });
       const data = await request.json();
       if (data.success) {
         toast.success("Addresses Fetched Successfully !");
@@ -76,7 +73,7 @@ export const updateUserAddress = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/address/updateUserAddress/${dataObject.userId}`,
+        `/api/address/updateUserAddress/${dataObject.userId}`,
         {
           credentials: "include",
           method: "PUT",
@@ -109,7 +106,7 @@ export const deleteUserAddress = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/address/deleteUserAddress/${dataObject.userId}/${dataObject.addressId}`,
+        `/api/address/deleteUserAddress/${dataObject.userId}/${dataObject.addressId}`,
         {
           credentials: "include",
           method: "DELETE",
