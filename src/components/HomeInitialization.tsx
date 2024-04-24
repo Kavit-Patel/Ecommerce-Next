@@ -39,11 +39,10 @@ const HomeInitialization = () => {
   useEffect(() => {
     if (
       user.user?._id &&
-      (paymentSuccedStatus === "success" ||
-        order.createdStatus === "success" ||
-        cart.statusDb === "idle")
+      cart.statusDb === "idle" &&
+      (paymentSuccedStatus === "success" || order.createdStatus === "success")
     ) {
-      dispatch(getCartFromDb(user.user._id)); //after order generation db cart item state needs to be latest(empty)
+      dispatch(getCartFromDb(user.user._id));
       dispatch(setCartItemLs([])); // after order generation ls cart item state needs to be emptied
     }
   }, [
@@ -105,13 +104,13 @@ const HomeInitialization = () => {
     if (data.productsStatus === "idle" || data.products.length === 0) {
       dispatch(fetchProducts());
     }
-    if (
-      user.status === "success" &&
-      paymentSuccedStatus === "idle" &&
-      order.createdStatus === "idle"
-    ) {
-      dispatch(getCartFromDb(user.user?._id));
-    }
+    // if (
+    //   user.status === "success" &&
+    //   paymentSuccedStatus === "idle" &&
+    //   order.createdStatus === "idle"
+    // ) {
+    //   dispatch(getCartFromDb(user.user?._id));
+    // }
   }, [
     dispatch,
     data.productsStatus,
