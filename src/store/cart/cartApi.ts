@@ -6,9 +6,10 @@ export const getCartFromDb = createAsyncThunk(
   "cart/fetch",
   async (userId: string | null | undefined, { rejectWithValue }) => {
     try {
-      const request = await fetch(`/api/cart/getUserCart/${userId}`, {
-        credentials: "include",
-      });
+      const request = await fetch(
+        `${process.env.NEXT_PUBLIC_API}/api/cart/getUserCart/${userId}`,
+        { credentials: "include" }
+      );
       const data = await request.json();
       if (data.success) {
         toast.success(data.message);
@@ -37,7 +38,7 @@ export const addToCart = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `/api/cart/addToCart/${
+        `${process.env.NEXT_PUBLIC_API}/api/cart/addToCart/${
           dataObject.userId ? dataObject.userId : "6678f3af45bd1badthina555"
         }/${
           dataObject.productId
@@ -78,7 +79,7 @@ export const removeItem = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `/api/cart/removeItem/${
+        `${process.env.NEXT_PUBLIC_API}/api/cart/removeItem/${
           dataObject.userId ? dataObject.userId : "6678f3af45bd1badthina555"
         }/${
           dataObject.cartId ? dataObject.cartId : "6678f3af45bd1badthina555"
@@ -117,7 +118,7 @@ export const syncLsCartToDb = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `/api/cart/syncCartWithLs/${dataObject.userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/cart/syncCartWithLs/${dataObject.userId}`,
         {
           credentials: "include",
           method: "POST",
@@ -154,7 +155,7 @@ export const syncLsCartQuantityToDb = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `/api/cart/syncQuantityWithLs/${dataObject.userId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/cart/syncQuantityWithLs/${dataObject.userId}`,
         {
           credentials: "include",
           method: "POST",

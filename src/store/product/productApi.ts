@@ -4,13 +4,17 @@ export const fetchProducts = createAsyncThunk(
   "product/fetch",
   async (_, { rejectWithValue }) => {
     try {
-      const request = await fetch(`/api/product/getAllProducts`, {
-        credentials: "include",
-      });
+      const request = await fetch(
+        `${process.env.NEXT_PUBLIC_API}/api/product/getAllProducts`,
+        {
+          credentials: "include",
+        }
+      );
       const data = await request.json();
       if (data.success) {
         return data.response;
       } else {
+        console.log(data.message);
         throw new Error(data.message);
       }
     } catch (error) {
@@ -23,7 +27,9 @@ export const fetchProducts = createAsyncThunk(
 export const fetchSingleProduct = createAsyncThunk(
   "singleProduct/fetch",
   async (id: string) => {
-    const request = await fetch(`/api/product/getSingleProduct/${id}`);
+    const request = await fetch(
+      `${process.env.NEXT_PUBLIC_API}/api/product/getSingleProduct/${id}`
+    );
     const data = await request.json();
     if (data.success) {
       return data.response;

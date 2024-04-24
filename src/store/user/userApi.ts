@@ -13,14 +13,17 @@ export const registerAsyncUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const request = await fetch(`/api/user/addNewUser`, {
-        credentials: "include",
-        method: "POST",
-        headers: {
-          "Content-Type": "Application/Json",
-        },
-        body: JSON.stringify(userDetails),
-      });
+      const request = await fetch(
+        `${process.env.NEXT_PUBLIC_API}/api/user/addNewUser`,
+        {
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "Application/Json",
+          },
+          body: JSON.stringify(userDetails),
+        }
+      );
 
       const data = await request.json();
       if (data.success) {
@@ -45,14 +48,17 @@ export const fetchAsyncUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const request = await fetch(`/api/user/loginUser`, {
-        credentials: "include",
-        method: "POST",
-        headers: {
-          "Content-Type": "Application/Json",
-        },
-        body: JSON.stringify(userLoginDetails),
-      });
+      const request = await fetch(
+        `${process.env.NEXT_PUBLIC_API}/api/user/loginUser`,
+        {
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "Application/Json",
+          },
+          body: JSON.stringify(userLoginDetails),
+        }
+      );
       const data = await request.json();
       if (data.success) {
         toast.success(data.message);
@@ -73,12 +79,15 @@ export const autoLoginWithCookie = createAsyncThunk(
   "user/auto-login",
   async (_, { rejectWithValue }) => {
     try {
-      const request = await fetch(`/api/user/cookieAutoLogin`, {
-        credentials: "include",
-        headers: {
-          "Content-Type": "Application/Json",
-        },
-      });
+      const request = await fetch(
+        `${process.env.NEXT_PUBLIC_API}/api/user/cookieAutoLogin`,
+        {
+          credentials: "include",
+          headers: {
+            "Content-Type": "Application/Json",
+          },
+        }
+      );
       const data = await request.json();
       if (data.success) {
         toast.success(data.message);

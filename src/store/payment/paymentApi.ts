@@ -13,7 +13,7 @@ export const createPaymentIntent = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `/api/payment/createPaymentIntent/${dataObject.userId}/${dataObject.orderId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/payment/createPaymentIntent/${dataObject.userId}/${dataObject.orderId}`,
         {
           credentials: "include",
           method: "POST",
@@ -53,7 +53,7 @@ export const getExistingPaymentIntent = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `/api/payment/fetchOrderPaymentIntent/${dataObject.userId}/${dataObject.orderId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/payment/fetchOrderPaymentIntent/${dataObject.userId}/${dataObject.orderId}`,
         {
           credentials: "include",
           headers: {
@@ -92,7 +92,7 @@ export const paymentSuccessed = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `/api/payment/paymentSuccessed/${dataObject.userId}/${dataObject.paymentId}`,
+        `${process.env.NEXT_PUBLIC_API}/api/payment/paymentSuccessed/${dataObject.userId}/${dataObject.paymentId}`,
         {
           credentials: "include",
           method: "POST",
