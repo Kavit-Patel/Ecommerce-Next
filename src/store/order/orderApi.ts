@@ -19,7 +19,7 @@ export const addNewOrder = createAsyncThunk(
     };
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/order/addNewOrder/${dataObject.userId}`,
+        `/api/order/addNewOrder/${dataObject.userId}`,
         {
           credentials: "include",
           method: "POST",
@@ -50,15 +50,12 @@ export const getUserOrders = createAsyncThunk(
   "order/fetchUserOrders",
   async (userId: string | undefined, { rejectWithValue }) => {
     try {
-      const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/order/getUserOrders/${userId}`,
-        {
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const request = await fetch(`/api/order/getUserOrders/${userId}`, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const data = await request.json();
       if (data.success) {
         toast.success(data.message);
@@ -84,7 +81,7 @@ export const getSingleUserOrder = createAsyncThunk(
   ) => {
     try {
       const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/order/getSingleUserOrder/${dataObject.userId}/${dataObject.orderId}`,
+        `/api/order/getSingleUserOrder/${dataObject.userId}/${dataObject.orderId}`,
         {
           credentials: "include",
           headers: {
@@ -113,15 +110,12 @@ export const getUserPendingOrder = createAsyncThunk(
   "order/fetchPendingOrder",
   async (userId: string | undefined, { rejectWithValue }) => {
     try {
-      const request = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/order/getUserPendingOrder/${userId}`,
-        {
-          credentials: "include",
-          headers: {
-            "Content-Type": "Application/Json",
-          },
-        }
-      );
+      const request = await fetch(`/api/order/getUserPendingOrder/${userId}`, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "Application/Json",
+        },
+      });
       const data = await request.json();
       if (data.success) {
         toast.success(data.message);
