@@ -1,5 +1,11 @@
 "use client";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -227,12 +233,16 @@ const CheckOut = () => {
       country: "",
     });
   };
-  const handleDelete = (addressId: string | undefined) => {
-    dispatch(deleteUserAddress({ userId: user.user?._id, addressId }));
-  };
+  const handleDelete = useCallback(
+    (addressId: string | undefined) => {
+      dispatch(deleteUserAddress({ userId: user.user?._id, addressId }));
+    },
+    [dispatch, user.user?._id]
+  );
+
   useEffect(() => {
     dispatch(fetchUserAddress(user.user?._id));
-  }, [dispatch, user.user?._id]);
+  }, [dispatch, user.user?._id, handleDelete]);
 
   useEffect(() => {
     dispatch(getUserPendingOrder(user.user?._id));
